@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Fake Detection</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        body {
+            background-image: url('https://viso.ai/wp-content/uploads/2020/11/neural-networks-background.jpg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            margin-top: 50%;
+            margin-bottom:50%;
+            margin-left: 50%;
+            margin-right: 50%;
+            backface-visibility: calc(100vw - 100vh);
+
+
+        }
+        h1 {
+            text-align: center;
+            margin-top: 50%;
+            margin-bottom: 50%;
+            margin-left: 50%;
+            margin-right: 50%;
+
+            color: white;
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        input {
+            width: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #eee;
+            cursor: pointer;
+        }
+        #result {
+            text-align: center;
+        }
+        </style>
+</head>
+<body>
+    <h1>Deep Fake Detection</h1>
+    <form id="uploadForm" action="/detect" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*, video/*, audio/*" required>
+        <button type="submit">Detect</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+
+            fetch('/detect', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = data.result || data.error;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('result').innerHTML = 'An error occurred.';
+            });
+        });
+    </script>
+</body>
+</html>
